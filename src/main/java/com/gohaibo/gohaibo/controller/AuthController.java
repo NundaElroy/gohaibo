@@ -26,21 +26,27 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?>  registerUser(@RequestBody RegisterDTO registerDTO){
-        if(registerDTO == null){
-            return ResponseEntity.badRequest().body(new ApiResponse<String>(false,
-                    "unsuccessful request", "User cannot be null"));
+    public ResponseEntity<ApiResponse<String>> registerUser( @RequestBody RegisterDTO registerDTO) {
+        // Register the user
+        boolean isRegistered = authService.registerUser(registerDTO);
+
+        if (!isRegistered) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ApiResponse<>(
+                            false,
+                            "Registration failed",
+                            "Unable to complete registration"
+                    ));
         }
 
-        if(!authService.registerUser(registerDTO)){
-            return ResponseEntity.badRequest().body(new ApiResponse<String>(false,
-                    "unsuccessful request", "registration failure"));
-        }
-
-
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(new ApiResponse<String>(true,
-                        "User registered successfully", "User registered successfully with email: " + registerDTO.getEmail()));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new ApiResponse<>(
+                        true,
+                        "Registration successful",
+                        "User registered successfully with email: " + registerDTO.getEmail()
+                ));
     }
 
 

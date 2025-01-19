@@ -1,6 +1,7 @@
 package com.gohaibo.gohaibo.utility;
 
 
+import com.gohaibo.gohaibo.exception.AuthenticationException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,13 +34,17 @@ public class JwtTokenProvider {
 
         //7 days
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
-
-        String token = Jwts.builder()
-                .subject(email)
-                .issuedAt(new Date())
-                .expiration(expireDate)
-                .signWith(key())
-                .compact();
+        String token;
+        try {
+             token = Jwts.builder()
+                    .subject(email)
+                    .issuedAt(new Date())
+                    .expiration(expireDate)
+                    .signWith(key())
+                    .compact();
+        }catch (Exception e){
+            throw  new AuthenticationException("Error generating token");
+        }
 
         return token;
     }
@@ -62,6 +67,11 @@ public class JwtTokenProvider {
     }
 
 
+
+
+}
+
+
 //
 //    // validate JWT token
 //    public boolean validateToken(String token){
@@ -72,5 +82,3 @@ public class JwtTokenProvider {
 //        return true;
 //
 //    }
-
-}
