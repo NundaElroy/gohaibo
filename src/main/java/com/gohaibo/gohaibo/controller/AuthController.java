@@ -47,6 +47,7 @@ public class AuthController {
                         "Registration successful",
                         "User registered successfully with email: " + registerDTO.getEmail()
                 ));
+
     }
 
 

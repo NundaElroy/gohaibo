@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ApiResponse<>(
                         false,
-                        e.getMessage(),
+                         e.getMessage(),
                         null
                 ));
     }

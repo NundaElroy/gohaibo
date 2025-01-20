@@ -53,10 +53,10 @@ public class  AuthServiceImp implements AuthService {
     @Override
     public String login(LoginDTO loginDTO) {
 
-        if (loginDTO == null) {
-            throw new AuthenticationException("Invalid data") {
-            };
+        if (loginDTO.getEmail() == null || loginDTO.getPassword() == null) {
+            throw new AuthenticationException("Invalid credentials");
         }
+
         // authenticate loginDTO
         Authentication authentication = authenticate(loginDTO.getEmail(), loginDTO.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
