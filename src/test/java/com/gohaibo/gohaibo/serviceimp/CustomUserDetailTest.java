@@ -1,4 +1,4 @@
-package com.gohaibo.gohaibo.service;
+package com.gohaibo.gohaibo.serviceimp;
 
 import com.gohaibo.gohaibo.repo.UserRepo;
 import org.junit.jupiter.api.BeforeEach;

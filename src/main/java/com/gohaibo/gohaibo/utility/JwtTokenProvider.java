@@ -20,7 +20,7 @@ public class JwtTokenProvider {
     private final String SECRET_KEY;
     private final long jwtExpirationDate;
 
-    public   JwtTokenProvider( String secretKey, @Value("${jwt.expiration.time}") long jwtExpirationDate) {
+    public   JwtTokenProvider( @Value("${jwt.secret.key}") String secretKey, @Value("${jwt.expiration.time}") long jwtExpirationDate) {
         this.SECRET_KEY = secretKey;
         this.jwtExpirationDate = jwtExpirationDate;
     }
@@ -56,8 +56,16 @@ public class JwtTokenProvider {
 
 
     // get username from JWT token
-    public String getEmail(String token){
+    public String getEmail(String authorizationHeader) {
+        // Ensure the Authorization header is valid
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Authorization header format.");
+        }
 
+        // Remove the 'Bearer ' prefix
+        String token = authorizationHeader.substring(7);
+
+        // Parse the JWT and extract the subject (email)
         return Jwts.parser()
                 .verifyWith( key())
                 .build()

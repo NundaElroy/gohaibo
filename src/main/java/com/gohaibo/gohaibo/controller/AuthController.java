@@ -2,12 +2,10 @@ package com.gohaibo.gohaibo.controller;
 
 import com.gohaibo.gohaibo.dto.LoginDTO;
 import com.gohaibo.gohaibo.dto.RegisterDTO;
-import com.gohaibo.gohaibo.entity.User;
-import com.gohaibo.gohaibo.serviceint.AuthService;
+import com.gohaibo.gohaibo.service.AuthService;
 import com.gohaibo.gohaibo.utility.ApiResponse;
 import com.gohaibo.gohaibo.utility.JwtAuthResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
