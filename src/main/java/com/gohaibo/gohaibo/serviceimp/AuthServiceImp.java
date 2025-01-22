@@ -1,10 +1,10 @@
-package com.gohaibo.gohaibo.service;
+package com.gohaibo.gohaibo.serviceimp;
 
 import com.gohaibo.gohaibo.dto.LoginDTO;
 import com.gohaibo.gohaibo.dto.RegisterDTO;
 import com.gohaibo.gohaibo.entity.User;
 import com.gohaibo.gohaibo.repo.UserRepo;
-import com.gohaibo.gohaibo.serviceint.AuthService;
+import com.gohaibo.gohaibo.service.AuthService;
 import com.gohaibo.gohaibo.utility.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,7 +53,9 @@ public class  AuthServiceImp implements AuthService {
     @Override
     public String login(LoginDTO loginDTO) {
 
-        if (loginDTO.getEmail() == null || loginDTO.getPassword() == null) {
+
+
+        if (loginDTO == null ||loginDTO.getEmail() == null || loginDTO.getPassword() == null) {
             throw new AuthenticationException("Invalid credentials");
         }
 

@@ -1,4 +1,4 @@
-package com.gohaibo.gohaibo.service;
+package com.gohaibo.gohaibo.serviceimp;
 
 import com.gohaibo.gohaibo.dto.LoginDTO;
 import com.gohaibo.gohaibo.dto.RegisterDTO;
@@ -7,7 +7,6 @@ import com.gohaibo.gohaibo.exception.AuthenticationException;
 import com.gohaibo.gohaibo.repo.UserRepo;
 import com.gohaibo.gohaibo.utility.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -24,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -224,7 +222,8 @@ class AuthServiceImpTest {
         // Act & Assert
         assertThatThrownBy(() -> authService.login(null))
                 .isInstanceOf(AuthenticationException.class)
-                .hasMessage("Invalid data");
+                .hasMessage("Invalid credentials");
+
     }
 
 

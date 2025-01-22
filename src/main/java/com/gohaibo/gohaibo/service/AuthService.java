@@ -1,8 +1,7 @@
-package com.gohaibo.gohaibo.serviceint;
+package com.gohaibo.gohaibo.service;
 
 import com.gohaibo.gohaibo.dto.LoginDTO;
 import com.gohaibo.gohaibo.dto.RegisterDTO;
-import com.gohaibo.gohaibo.entity.User;
 
 public interface AuthService {
     boolean registerUser(RegisterDTO registerDTO);
