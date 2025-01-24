@@ -35,7 +35,7 @@ public class User {
     private List<Project> teamProjects = new ArrayList<>();
 
     @OneToMany(mappedBy = "commenter",cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<Comments> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(mappedBy = "users")
     private List<Chat> chats = new ArrayList<>();

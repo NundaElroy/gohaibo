@@ -25,7 +25,7 @@ public class Issue {
     private String status;
     private Long projectID;
     private String priority;
-    private LocalDate localDate;
+    private LocalDate dueDate;
     private  List<String> tags = new ArrayList<>();
 
     @JoinColumn(name = "assignee_id")
@@ -39,7 +39,7 @@ public class Issue {
 
     @JsonIgnore
     @OneToMany(mappedBy = "issue",cascade = CascadeType.ALL , orphanRemoval = true)
-    private  List<Comments> comments = new ArrayList<>();
+    private  List<Comment> comments = new ArrayList<>();
     //because of a recursion issue
 
 

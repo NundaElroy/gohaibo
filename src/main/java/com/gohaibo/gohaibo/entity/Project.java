@@ -41,6 +41,6 @@ public class Project {
     @ManyToMany
     private List<User> team = new ArrayList<>();
 
-    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<Invitation> invitations = new ArrayList<>();
+//    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL , orphanRemoval = true)
+//    private List<Invitation> invitations = new ArrayList<>();
 }

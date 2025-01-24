@@ -17,7 +17,5 @@ public class Invitation {
     private String email;
     private String token;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    private Long projectID;
 }
