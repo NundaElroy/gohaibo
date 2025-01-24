@@ -26,17 +26,17 @@ import java.util.List;
 @Component
 public class JWTTokenValidator  extends OncePerRequestFilter {
 
-//     private  final JwtTokenProvider jwtTokenProvider;
+     private  final JwtTokenProvider jwtTokenProvider;
 
-//    public JWTTokenValidator(JwtTokenProvider jwtTokenProvider) {
-//        this.jwtTokenProvider = jwtTokenProvider;
-//    }
-
-    private final String SECRET_KEY;
-
-    public JWTTokenValidator(@Value("${jwt.secret.key}") String secretKey) {
-        this.SECRET_KEY = secretKey;
+    public JWTTokenValidator(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
     }
+
+//    private final String SECRET_KEY;
+//
+//    public JWTTokenValidator(@Value("${jwt.secret.key}") String secretKey) {
+//        this.SECRET_KEY = secretKey;
+//    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -49,7 +49,6 @@ public class JWTTokenValidator  extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println(SECRET_KEY);
         String authorizationHeader = request.getHeader("Authorization");
         String token = authorizationHeader.substring(7);//Bearer length is 7
 
@@ -59,16 +58,21 @@ public class JWTTokenValidator  extends OncePerRequestFilter {
         }
 
         try{
-            // This is the secret key used to sign the JWT
-            SecretKey secretkey = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-            Claims claims = Jwts.parser()
-                    .verifyWith(secretkey)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
 
-            String email = String.valueOf(claims.get("email"));
-            String authorities = String.valueOf(claims.get("authorities"));
+
+            if(!jwtTokenProvider.validateToken(token)){
+                throw new BadCredentialsException("invalid token....");
+            }
+//            // This is the secret key used to sign the JWT
+//            SecretKey secretkey = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+//            Claims claims = Jwts.parser()
+//                    .verifyWith(secretkey)
+//                    .build()
+//                    .parseSignedClaims(token)
+//                    .getPayload();
+
+            String email = jwtTokenProvider.getEmail(authorizationHeader);
+            String authorities = "ROLE_USER";
 
             List<GrantedAuthority>  auths = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 

@@ -74,19 +74,22 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
+    // validate JWT token
+    public boolean validateToken(String token){
+        Jwts.parser()
+                .verifyWith((SecretKey) key())
+                .build()
+                .parse(token);
+
+        return true;
+
+    }
+
 
 
 
 }
 
 
-//
-//    // validate JWT token
-//    public boolean validateToken(String token){
-//        Jwts.parser()
-//                .verifyWith((SecretKey) key())
-//                .build()
-//                .parse(token);
-//        return true;
-//
-//    }
+
+
