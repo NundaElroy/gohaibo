@@ -3,10 +3,11 @@ package com.gohaibo.gohaibo.controller;
 
 import com.gohaibo.gohaibo.entity.Issue;
 import com.gohaibo.gohaibo.entity.User;
+import com.gohaibo.gohaibo.exception.ResourceNotFoundException;
 import com.gohaibo.gohaibo.service.IssueService;
 import com.gohaibo.gohaibo.service.UserService;
 import com.gohaibo.gohaibo.utility.ApiResponse;
-import com.gohaibo.gohaibo.utility.IssueDTO;
+import com.gohaibo.gohaibo.dto.IssueDTO;
 import com.gohaibo.gohaibo.utility.IssueRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +28,14 @@ public class IssueController {
     }
 
 
-    @GetMapping("/issueID")
-    public ResponseEntity<Issue> getIssueById(@PathVariable Long issueID) throws Exception {
+    @GetMapping("/{issueID}")
+    public ResponseEntity<Issue> getIssueById(@PathVariable Long issueID) throws ResourceNotFoundException {
         Issue issue = issueService.getIssueById(issueID);
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
 
     @GetMapping("/project/{projectID}")
-    public ResponseEntity<List<Issue>> getIssueByProjectID(@PathVariable Long projectID) throws Exception {
+    public ResponseEntity<List<Issue>> getIssueByProjectID(@PathVariable Long projectID) throws ResourceNotFoundException {
         List<Issue> issue = issueService.getIssueByProjectID(projectID);
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
@@ -67,20 +68,20 @@ public class IssueController {
     }
 
     @DeleteMapping("/{issueID}")
-    public ResponseEntity<ApiResponse<Object>> deleteIssue(@PathVariable Long issueID, @RequestHeader("Authorization") String token) throws Exception {
+    public ResponseEntity<ApiResponse<Object>> deleteIssue(@PathVariable Long issueID, @RequestHeader("Authorization") String token) throws ResourceNotFoundException{
         User user = userService.findUserProfileByJwt(token);
         issueService.deleteIssue(issueID, user.getId());
-        return new ResponseEntity<>(new ApiResponse<>(true, "issue deleted", null), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>(true, "issue deleted", "Successful operation"), HttpStatus.OK);
     }
 
-    @PutMapping("/{issueID}/assignee/{userID}")
-    public ResponseEntity<Issue> addUserToIssue(@PathVariable Long issueID, @PathVariable Long userID) throws Exception {
+    @PatchMapping("/{issueID}/assignee/{userID}")
+    public ResponseEntity<Issue> addUserToIssue(@PathVariable Long issueID, @PathVariable Long userID) throws ResourceNotFoundException {
         Issue issue = issueService.addUserToIssue(issueID, userID);
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
 
     @PatchMapping("/{issueID}/status/{status}")
-    public ResponseEntity<Issue> updateStatus(@PathVariable Long issueID, @PathVariable String status) throws Exception {
+    public ResponseEntity<Issue> updateStatus(@PathVariable Long issueID, @PathVariable String status) throws ResourceNotFoundException {
         Issue issue = issueService.updateStatus(issueID, status);
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }

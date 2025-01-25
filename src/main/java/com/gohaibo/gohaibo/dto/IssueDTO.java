@@ -1,4 +1,4 @@
-package com.gohaibo.gohaibo.utility;
+package com.gohaibo.gohaibo.dto;
 
 import com.gohaibo.gohaibo.entity.Project;
 import com.gohaibo.gohaibo.entity.User;

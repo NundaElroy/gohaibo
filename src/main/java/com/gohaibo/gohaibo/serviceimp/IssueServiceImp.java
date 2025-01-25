@@ -3,6 +3,7 @@ package com.gohaibo.gohaibo.serviceimp;
 import com.gohaibo.gohaibo.entity.Issue;
 import com.gohaibo.gohaibo.entity.Project;
 import com.gohaibo.gohaibo.entity.User;
+import com.gohaibo.gohaibo.exception.ResourceNotFoundException;
 import com.gohaibo.gohaibo.repo.IssueRepo;
 import com.gohaibo.gohaibo.service.IssueService;
 import com.gohaibo.gohaibo.service.ProjectService;
@@ -28,13 +29,19 @@ public class IssueServiceImp implements IssueService {
     }
 
     @Override
-    public Issue getIssueById(Long issueID) throws Exception {
-        return  issueRepo.findById(issueID).orElseThrow(()-> new Exception("Issue not found"));
+    public Issue getIssueById(Long issueID) throws ResourceNotFoundException {
+        return  issueRepo.findById(issueID).orElseThrow(()-> new ResourceNotFoundException("Issue not found"));
     }
 
     @Override
-    public List<Issue> getIssueByProjectID(Long projectID) throws Exception {
-        return issueRepo.findByProjectID(projectID);
+    public List<Issue> getIssueByProjectID(Long projectID) throws ResourceNotFoundException {
+        List<Issue> issues =  issueRepo.findByProjectID(projectID);
+
+        if(issues.isEmpty()){
+            throw new ResourceNotFoundException("No issues found for this project");
+        }
+
+        return  issues;
     }
 
     @Override
@@ -56,13 +63,13 @@ public class IssueServiceImp implements IssueService {
     }
 
     @Override
-    public void deleteIssue(Long issueID, Long userID) throws Exception {
+    public void deleteIssue(Long issueID, Long userID) throws ResourceNotFoundException{
         getIssueById(issueID);
         issueRepo.deleteById(issueID);
     }
 
     @Override
-    public Issue addUserToIssue(Long issueID, Long userID) throws Exception {
+    public Issue addUserToIssue(Long issueID, Long userID) throws ResourceNotFoundException {
        User user = userService.findUserById(userID);
        Issue issue = getIssueById(issueID);
          issue.setAssignee(user);
@@ -72,7 +79,7 @@ public class IssueServiceImp implements IssueService {
     }
 
     @Override
-    public Issue updateStatus(Long issueID, String status) throws Exception {
+    public Issue updateStatus(Long issueID, String status) throws ResourceNotFoundException {
         Issue issue = getIssueById(issueID);
         issue.setStatus(status);
         return issueRepo.save(issue);
