@@ -3,6 +3,8 @@ package com.gohaibo.gohaibo.serviceimp;
 import com.gohaibo.gohaibo.entity.Chat;
 import com.gohaibo.gohaibo.entity.Project;
 import com.gohaibo.gohaibo.entity.User;
+import com.gohaibo.gohaibo.exception.ResourceCannotBeCreatedException;
+import com.gohaibo.gohaibo.exception.ResourceNotFoundException;
 import com.gohaibo.gohaibo.repo.ProjectRepo;
 import com.gohaibo.gohaibo.service.ChatService;
 import com.gohaibo.gohaibo.service.ProjectService;
@@ -30,7 +32,7 @@ public class ProjectServiceImp implements ProjectService {
 
     @Transactional
     @Override
-    public Project createProject(ProjectRequest project, User user) throws Exception {
+    public Project createProject(ProjectRequest project, User user) throws ResourceCannotBeCreatedException {
         Project createdProject = new Project();
         createdProject.setOwner(user);
         createdProject.setTags(project.getTags());
@@ -58,7 +60,7 @@ public class ProjectServiceImp implements ProjectService {
    * then we filter the projects based on the category and tag
    */
     @Override
-    public List<Project> getProjectByTeams(User user, String tag, String category) throws Exception {
+    public List<Project> getProjectByTeams(User user, String tag, String category) throws ResourceNotFoundException {
         //for filtering purposes we can use the team or owner of the project
         List<Project> projects = projectRepo.findByTeamContainingOrOwner(user,user);
 
@@ -79,8 +81,8 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public Project getProjectById(Long id) throws Exception {
-        return projectRepo.findProjectById(id).orElseThrow(() -> new Exception("Project not found"));
+    public Project getProjectById(Long id) throws ResourceNotFoundException {
+        return projectRepo.findProjectById(id).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
     }
 
     @Override
@@ -89,19 +91,20 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public Project updateProject(Project updatedProject, Long id) throws Exception {
-        Project project = projectRepo.findProjectById(id).orElseThrow(() -> new Exception("Project not found"));
+    public Project updateProject(ProjectRequest updatedProject, Long id) throws ResourceNotFoundException{
+        Project project = projectRepo.findProjectById(id).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
         project.setName(updatedProject.getName());
         project.setDescription(updatedProject.getDescription());
         project.setTags(updatedProject.getTags());
+        project.setCategory(updatedProject.getCategory());
 
         return projectRepo.save(project);
     }
 
     @Transactional
     @Override
-    public void addUserToProject(Long projectID, Long userID) throws Exception {
-        Project project = projectRepo.findProjectById(projectID).orElseThrow(() -> new Exception("Project not found"));
+    public void addUserToProject(Long projectID, Long userID) throws ResourceNotFoundException {
+        Project project = projectRepo.findProjectById(projectID).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
         User user = userService.findUserById(userID);
 
         if(!project.getTeam().contains(user)){
@@ -114,8 +117,8 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public void removeUserToProject(Long projectID, Long userID) throws Exception {
-        Project project = projectRepo.findProjectById(projectID).orElseThrow(() -> new Exception("Project not found"));
+    public void removeUserToProject(Long projectID, Long userID) throws ResourceNotFoundException {
+        Project project = projectRepo.findProjectById(projectID).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
         User user = userService.findUserById(userID);
 
         if(project.getTeam().contains(user)){
@@ -128,13 +131,13 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public Chat getChatByProjectID(Long projectID) throws Exception {
-        Project project = projectRepo.findProjectById(projectID).orElseThrow(() -> new Exception("Project not found"));
+    public Chat getChatByProjectID(Long projectID) throws ResourceNotFoundException {
+        Project project = projectRepo.findProjectById(projectID).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
         return project.getChat();
     }
 
     @Override
-    public List<Project> searchProjects(String keyword, User user) throws Exception {
+    public List<Project> searchProjects(String keyword, User user) throws ResourceNotFoundException {
 
         //so this is the wildcard incase it contains the keyword
         String partialName = "%" + keyword + "%";

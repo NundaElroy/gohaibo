@@ -2,6 +2,7 @@ package com.gohaibo.gohaibo.serviceimp;
 
 
 import com.gohaibo.gohaibo.entity.Chat;
+import com.gohaibo.gohaibo.exception.ResourceCannotBeCreatedException;
 import com.gohaibo.gohaibo.repo.ChatRepo;
 import com.gohaibo.gohaibo.service.ChatService;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class ChatServiceImp implements ChatService {
     }
 
     @Override
-    public Chat createChat(Chat chat) throws Exception {
+    public Chat createChat(Chat chat) throws ResourceCannotBeCreatedException {
         return chatRepo.save(chat);
     }
 }

@@ -59,9 +59,9 @@ public class ProjectController {
         return new ResponseEntity<>(newProject, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{projectID}")
+    @PutMapping("/{projectID}")
     public ResponseEntity<Project> updateProject(@PathVariable Long projectID ,
-                                                 @RequestBody Project project
+                                                 @RequestBody ProjectRequest project
                                                  ) throws Exception {
 
         Project updatedProject = projectService.updateProject( project , projectID);
@@ -74,7 +74,7 @@ public class ProjectController {
         User user = userService.findUserProfileByJwt(token);
         projectService.deleteProject(projectID, user.getId());
 
-        return new ResponseEntity<>(new ApiResponse<>(true,"project "+ projectID + "deleted",
+        return new ResponseEntity<>(new ApiResponse<>(true,"project with projectID"+ projectID + " deleted",
                 "operation success"),
                 HttpStatus.OK);
     }

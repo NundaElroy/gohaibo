@@ -27,6 +27,7 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "assignee",cascade = CascadeType.ALL , orphanRemoval = true)
     private List<Issue> assignedIssues = new ArrayList<>();
 
@@ -44,6 +45,7 @@ public class User {
     @OneToMany(mappedBy = "commenter",cascade = CascadeType.ALL , orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "users")
     private List<Chat> chats = new ArrayList<>();
 
