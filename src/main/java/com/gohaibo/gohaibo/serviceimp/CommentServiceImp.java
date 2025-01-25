@@ -3,6 +3,7 @@ package com.gohaibo.gohaibo.serviceimp;
 import com.gohaibo.gohaibo.entity.Comment;
 import com.gohaibo.gohaibo.entity.Issue;
 import com.gohaibo.gohaibo.entity.User;
+import com.gohaibo.gohaibo.exception.ResourceNotFoundException;
 import com.gohaibo.gohaibo.repo.CommentRepo;
 import com.gohaibo.gohaibo.repo.IssueRepo;
 import com.gohaibo.gohaibo.repo.UserRepo;
@@ -29,10 +30,10 @@ public class CommentServiceImp implements CommentService {
 
 
     @Override
-    public Comment createComment(Long IssueID, Long userID, String content) throws Exception {
-        Issue issue = issueRepo.findById(IssueID).orElseThrow(() -> new Exception("Issue with id " + IssueID +
+    public Comment createComment(Long IssueID, Long userID, String content) throws ResourceNotFoundException {
+        Issue issue = issueRepo.findById(IssueID).orElseThrow(() -> new ResourceNotFoundException("Issue with id " + IssueID +
                 " not found"));
-        User user = userRepo.findById(userID).orElseThrow(() -> new Exception("User with id " + userID + " not found"));
+        User user = userRepo.findById(userID).orElseThrow(() -> new ResourceNotFoundException("User with id " + userID + " not found"));
 
         Comment comment = new Comment();
         comment.setIssue(issue);
@@ -53,14 +54,14 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-    public void deleteComment(Long commentID, Long userID) throws Exception {
-        Comment comment = commentRepo.findById(commentID).orElseThrow(() -> new Exception("Comment with id " + commentID +
+    public void deleteComment(Long commentID, Long userID) throws ResourceNotFoundException{
+        Comment comment = commentRepo.findById(commentID).orElseThrow(() -> new ResourceNotFoundException("Comment with id " + commentID +
                 " not found"));
 
-        User user = userRepo.findById(userID).orElseThrow(() -> new Exception("User with id " + userID + " not found"));
+        User user = userRepo.findById(userID).orElseThrow(() -> new ResourceNotFoundException("User with id " + userID + " not found"));
 
         if(!comment.getCommenter().equals(user)) {
-            throw new Exception("User does not have permission to delete this comment");
+            throw new ResourceNotFoundException("User does not have permission to delete this comment");
         }
 
         commentRepo.deleteById(commentID);
@@ -69,7 +70,7 @@ public class CommentServiceImp implements CommentService {
 
 
     @Override
-    public List<Comment> findCommentsByIssueID(Long issueID) throws Exception {
+    public List<Comment> findCommentsByIssueID(Long issueID) throws ResourceNotFoundException{
         return commentRepo.findCommentsByIssueId(issueID);
     }
 }
