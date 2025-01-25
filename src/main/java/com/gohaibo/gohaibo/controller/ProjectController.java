@@ -10,6 +10,8 @@ import com.gohaibo.gohaibo.service.ProjectService;
 import com.gohaibo.gohaibo.service.UserService;
 import com.gohaibo.gohaibo.utility.ApiResponse;
 import com.gohaibo.gohaibo.utility.InviteRequest;
+import com.gohaibo.gohaibo.dto.ProjectRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,9 +53,9 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project, @RequestHeader("Authorization")String token) throws Exception {
+    public ResponseEntity<Project> createProject(@Valid @RequestBody ProjectRequest projectRequest, @RequestHeader("Authorization")String token) throws Exception {
         User user = userService.findUserProfileByJwt(token);
-        Project newProject = projectService.createProject(project, user);
+        Project newProject = projectService.createProject(projectRequest, user);
         return new ResponseEntity<>(newProject, HttpStatus.CREATED);
     }
 

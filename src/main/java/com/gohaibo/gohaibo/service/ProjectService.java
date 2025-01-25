@@ -3,12 +3,13 @@ package com.gohaibo.gohaibo.service;
 import com.gohaibo.gohaibo.entity.Chat;
 import com.gohaibo.gohaibo.entity.Project;
 import com.gohaibo.gohaibo.entity.User;
+import com.gohaibo.gohaibo.dto.ProjectRequest;
 
 import java.util.List;
 
 public interface ProjectService {
 
-    Project createProject(Project project, User user) throws Exception;
+    Project createProject(ProjectRequest project, User user) throws Exception;
 
     List<Project> getProjectByTeams(User user, String tag , String category) throws Exception;
 

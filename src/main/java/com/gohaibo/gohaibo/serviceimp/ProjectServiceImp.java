@@ -7,6 +7,7 @@ import com.gohaibo.gohaibo.repo.ProjectRepo;
 import com.gohaibo.gohaibo.service.ChatService;
 import com.gohaibo.gohaibo.service.ProjectService;
 import com.gohaibo.gohaibo.service.UserService;
+import com.gohaibo.gohaibo.dto.ProjectRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -29,14 +30,14 @@ public class ProjectServiceImp implements ProjectService {
 
     @Transactional
     @Override
-    public Project createProject(Project project, User user) throws Exception {
+    public Project createProject(ProjectRequest project, User user) throws Exception {
         Project createdProject = new Project();
-        project.setOwner(user);
-        project.setTags(project.getTags());
-        project.setName(project.getName());
-        project.setDescription(project.getDescription());
-        project.setCategory(project.getCategory());
-        project.getTeam().add(user);
+        createdProject.setOwner(user);
+        createdProject.setTags(project.getTags());
+        createdProject.setName(project.getName());
+        createdProject.setDescription(project.getDescription());
+        createdProject.setCategory(project.getCategory());
+        createdProject.getTeam().add(user);
 
         Project savedProject = projectRepo.save(createdProject);
 

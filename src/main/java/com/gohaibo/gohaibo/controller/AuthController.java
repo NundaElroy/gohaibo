@@ -5,6 +5,7 @@ import com.gohaibo.gohaibo.dto.RegisterDTO;
 import com.gohaibo.gohaibo.service.AuthService;
 import com.gohaibo.gohaibo.utility.ApiResponse;
 import com.gohaibo.gohaibo.utility.JwtAuthResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<String>> registerUser( @RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<ApiResponse<String>> registerUser(@Valid @RequestBody RegisterDTO registerDTO) {
         // Register the user
         boolean isRegistered = authService.registerUser(registerDTO);
 
@@ -50,7 +51,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDTO user){
+    public ResponseEntity<JwtAuthResponse> login(@Valid @RequestBody LoginDTO user){
         String token = authService.login(user);
 
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
