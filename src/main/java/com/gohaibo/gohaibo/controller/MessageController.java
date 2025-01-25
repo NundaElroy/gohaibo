@@ -7,6 +7,7 @@ import com.gohaibo.gohaibo.service.MessageService;
 import com.gohaibo.gohaibo.service.ProjectService;
 import com.gohaibo.gohaibo.service.UserService;
 import com.gohaibo.gohaibo.utility.CreateMessageRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class MessageController {
 
 
     @PostMapping("/send")
-    public ResponseEntity<Message> sendMessage(@RequestBody CreateMessageRequest req) throws Exception {
+    public ResponseEntity<Message> sendMessage(@Valid @RequestBody CreateMessageRequest req) throws Exception {
 
         User user = userService.findUserById(req.getSenderID());
         Chat chat = projectService.getProjectById(req.getProjectID()).getChat();

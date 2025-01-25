@@ -2,6 +2,7 @@ package com.gohaibo.gohaibo.serviceimp;
 
 import com.gohaibo.gohaibo.entity.Chat;
 import com.gohaibo.gohaibo.entity.Message;
+import com.gohaibo.gohaibo.exception.ResourceNotFoundException;
 import com.gohaibo.gohaibo.repo.MessageRepo;
 import com.gohaibo.gohaibo.repo.UserRepo;
 import com.gohaibo.gohaibo.service.MessageService;
@@ -28,8 +29,8 @@ public class MessageServiceImp implements MessageService {
 
 
     @Override
-    public Message sendMessage(Long senderID, Long projectID, String content) throws Exception {
-        User sender = userRepo.findById(senderID).orElseThrow(() -> new Exception("User not found"));
+    public Message sendMessage(Long senderID, Long projectID, String content) throws ResourceNotFoundException {
+        User sender = userRepo.findById(senderID).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Chat chat = projectService.getProjectById(projectID).getChat();
 
@@ -50,7 +51,7 @@ public class MessageServiceImp implements MessageService {
     }
 
     @Override
-    public List<Message> getMessagesByProjectID(Long projectID) throws Exception {
+    public List<Message> getMessagesByProjectID(Long projectID) throws ResourceNotFoundException {
         Chat chat = projectService.getChatByProjectID(projectID);
         List<Message> findByChatIDOrderByCreatedAtAsc = messageRepo.findByChatIdOrderByCreatedAtAsc(chat.getId());
 

@@ -20,6 +20,8 @@ public class Chat {
 
     private String name;
 
+
+    @JsonIgnore
     @JoinColumn(name = "project_id")
     @OneToOne
     private  Project project;
